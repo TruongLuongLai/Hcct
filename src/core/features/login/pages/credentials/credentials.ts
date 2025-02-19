@@ -19,7 +19,7 @@ import { debounceTime } from 'rxjs/operators';
 
 import { CoreApp } from '@services/app';
 import { CoreNetwork } from '@services/network';
-import { CoreSiteCheckResponse, CoreSites } from '@services/sites';
+import { CoreSiteCheckResponse, CoreSites, CoreSitesProvider } from '@services/sites';
 import { CoreDomUtils } from '@services/utils/dom';
 import { CoreLoginHelper } from '@features/login/services/login-helper';
 import { Translate } from '@singletons';
@@ -75,6 +75,7 @@ export class CoreLoginCredentialsPage implements OnInit, OnDestroy {
 
     constructor(
         protected fb: FormBuilder,
+        private sitesProvider: CoreSitesProvider,
     ) {}
 
     /**
@@ -290,6 +291,8 @@ export class CoreLoginCredentialsPage implements OnInit, OnDestroy {
             this.credForm.controls['password'].reset();
 
             this.siteId = id;
+
+            this.sitesProvider.savelogininfotosite();
 
             await CoreNavigator.navigateToSiteHome({ params: { urlToOpen: this.urlToOpen } });
         } catch (error) {

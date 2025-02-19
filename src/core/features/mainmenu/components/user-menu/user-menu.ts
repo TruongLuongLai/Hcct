@@ -28,6 +28,7 @@ import {
     CoreUserProfileHandlerType,
     CoreUserDelegateContext,
 } from '@features/user/services/user-delegate';
+import { NavController } from '@ionic/angular/common';
 import { CoreNavigator } from '@services/navigator';
 import { CoreSites } from '@services/sites';
 import { CoreDomUtils } from '@services/utils/dom';
@@ -61,6 +62,8 @@ export class CoreMainMenuUserMenuComponent implements OnInit, OnDestroy {
     removeAccountOnLogout = false;
 
     protected subscription!: Subscription;
+
+    constructor( private nav: NavController, ) {}
 
     /**
      * @inheritdoc
@@ -139,6 +142,12 @@ export class CoreMainMenuUserMenuComponent implements OnInit, OnDestroy {
         const siteConfig = await CoreUtils.ignoreErrors(currentSite.getPublicConfig());
         this.siteLogo = currentSite.getLogoUrl(siteConfig);
         this.siteLogoLoaded = true;
+    }
+
+    // TH edit
+
+    Gradebook() {
+        this.nav.navigateForward(['main/gradebook'])
     }
 
     /**

@@ -27,6 +27,7 @@ import mimeToExt from '@/assets/mimetoext.json';
 import { CoreFileEntry, CoreFileHelper } from '@services/file-helper';
 import { CoreUrl } from '@singletons/url';
 import { CoreSites } from '@services/sites';
+import { CoreCourseModuleContentFile } from '@features/course/services/course';
 
 interface MimeTypeInfo {
     type: string;
@@ -167,7 +168,7 @@ export class CoreMimetypeUtilsProvider {
      * @param path Alternative path that will override fileurl from file object.
      * @returns The embedded HTML string.
      */
-    getEmbeddedHtml(file: CoreFileEntry, path?: string): string {
+    getEmbeddedHtml(file: CoreFileEntry, path?: string, lesss?: CoreCourseModuleContentFile[]): string {
         const filename = CoreUtils.isFileEntry(file) ? (file as FileEntry).name : file.filename;
         const extension = !CoreUtils.isFileEntry(file) && file.mimetype
             ? this.getExtension(file.mimetype)
@@ -188,16 +189,34 @@ export class CoreMimetypeUtilsProvider {
             path = path ?? (CoreUtils.isFileEntry(file) ? CoreFile.getFileEntryURL(file) : CoreFileHelper.getFileUrl(file));
             path = path && CoreFile.convertFileSrc(path);
 
+            var track = ''
+            if(lesss !== undefined) {
+                lesss.slice(1).map((item)=> {
+                    return track =  track + `<track src="${item.fileurl}" kind="subtitles" srclang=${JSON.stringify(item.filename.replace('.vtt',''))} label="${JSON.stringify(item.filename.replace('.vtt',''))=== '"vie"'? 'Tiếng Việt' : 'Tiếng Anh'}" default="true">`
+                })
+            }
+
             switch (embedType) {
                 case 'image':
                     return `<img src="${path}">`;
                 case 'audio':
                 case 'video':
-                    return [
-                        `<${embedType} controls title="${filename}" src="${path}" controlsList="nodownload">`,
-                        `<source src="${path}" type="${mimeType}">`,
-                        `</${embedType}>`,
-                    ].join('');
+                    if(lesss !== undefined) {
+                        if(lesss.length > 1) {
+                            return [
+                                `<${embedType} controls title="${filename}" src="${path.replace('?forcedownload=1&offline=1', '')}" controlsList="nodownload">`,
+                                `<source src="${path}" type="${mimeType}">`,
+                                `${track}`,
+                                `</${embedType}>`,
+                            ].join('');
+                        }else if(lesss.length == 1) {
+                            return [
+                                `<${embedType} controls title="${filename}" src="${path.replace('?forcedownload=1&offline=1', '')}" controlsList="nodownload">`,
+                                `<source src="${path}" type="${mimeType}">`,
+                                `</${embedType}>`,
+                            ].join('');
+                        }
+                    }
                 default:
                     return '';
             }

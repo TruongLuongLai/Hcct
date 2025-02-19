@@ -37,6 +37,11 @@ import { AddonModSurveyModule } from './survey/survey.module';
 import { AddonModUrlModule } from './url/url.module';
 import { AddonModWikiModule } from './wiki/wiki.module';
 import { AddonModWorkshopModule } from './workshop/workshop.module';
+import { AddonModQaaModule } from './qaa/qaa.module';
+import { AddonModThUrlModule } from './th_url/thurl.module';
+import { AddonModTHPageModule } from './thpage/page.module';
+import { AddonModThrdAssignModule } from './thrdassign/thrdassign.module';
+import { AddonModThGlossaryModule } from './thglossary/thglossary.module';
 
 @NgModule({
     imports: [
@@ -63,6 +68,12 @@ import { AddonModWorkshopModule } from './workshop/workshop.module';
         AddonModUrlModule,
         AddonModWikiModule,
         AddonModWorkshopModule,
+        AddonModQaaModule,
+        AddonModThUrlModule,
+        AddonModTHPageModule,
+        AddonModThrdAssignModule,
+        AddonModThGlossaryModule,
+
     ],
 })
 export class AddonModModule {}

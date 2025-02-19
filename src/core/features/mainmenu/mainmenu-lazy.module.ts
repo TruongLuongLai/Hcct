@@ -44,6 +44,10 @@ function buildRoutes(injector: Injector): Routes {
                     path: CoreMainMenuProvider.MORE_PAGE_NAME,
                     loadChildren: () => import('./mainmenu-more-lazy.module').then(m => m.CoreMainMenuMoreLazyModule),
                 },
+                {
+                    path: CoreMainMenuProvider.MORE_PAGE_NAME3,
+                    loadChildren: () => import('./pages/gradebook/gradebook.module').then( m => m.TranscriptPageModule)
+                },
                 ...mainMenuRoutes.children,
             ],
         },

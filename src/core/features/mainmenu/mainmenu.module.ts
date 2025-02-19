@@ -53,6 +53,10 @@ const appRoutes: Routes = [
         path: 'reload',
         loadChildren: () => import('./mainmenu-reload-lazy.module').then( m => m.CoreMainMenuReloadLazyModule),
     },
+    {
+        path: 'gradebook',
+        loadChildren: () => import('./pages/gradebook/gradebook.module').then( m => m.TranscriptPageModule),
+    },
 ];
 
 @NgModule({

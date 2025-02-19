@@ -48,7 +48,7 @@ export class CoreMainMenuProvider {
     static readonly MORE_PAGE_NAME = 'more';
     static readonly MAIN_MENU_HANDLER_BADGE_UPDATED = 'main_menu_handler_badge_updated';
     static readonly MAIN_MENU_VISIBILITY_UPDATED = 'main_menu_visbility_updated';
-
+    static readonly MORE_PAGE_NAME3 = 'gradebook';
     /**
      * Get the current main menu handlers.
      *

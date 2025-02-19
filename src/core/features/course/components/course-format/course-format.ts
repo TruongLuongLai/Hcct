@@ -39,7 +39,7 @@ import {
 } from '@features/course/services/course-helper';
 import { CoreCourseFormatDelegate } from '@features/course/services/format-delegate';
 import { CoreEventObserver, CoreEvents } from '@singletons/events';
-import { IonContent } from '@ionic/angular';
+import { AlertController, IonContent } from '@ionic/angular';
 import { CoreUtils } from '@services/utils/utils';
 import { CoreCourseCourseIndexComponent, CoreCourseIndexSectionWithModule } from '../course-index/course-index';
 import { CoreBlockHelper } from '@features/block/services/block-helper';
@@ -52,7 +52,13 @@ import { CoreDom } from '@singletons/dom';
 import { CoreUserTourDirectiveOptions } from '@directives/user-tour';
 import { CoreAnalytics, CoreAnalyticsEventType } from '@services/analytics';
 import { CoreBlockSideBlocksComponent } from '@features/block/components/side-blocks/side-blocks';
-import { ContextLevel } from '@/core/constants';
+import { ContextLevel, CoreConstants } from '@/core/constants';
+import { CoreSite } from '@classes/sites/site';
+import { CoreSites, CoreSitesProvider } from '@services/sites';
+import { NavController } from '@ionic/angular/common';
+import { CoreFilter } from '@features/filter/services/filter';
+import { Translate } from '@singletons';
+import { Device } from '@awesome-cordova-plugins/device/ngx';
 
 /**
  * Component to display course contents using a certain format. If the format isn't found, use default one.
@@ -124,14 +130,29 @@ export class CoreCourseFormatComponent implements OnInit, OnChanges, OnDestroy {
     protected modViewedObserver?: CoreEventObserver;
     protected lastCourseFormat?: string;
     protected viewedModulesInitialized = false;
+    currentSite?: CoreSite;
+
+    removeAccountOnLogout = false;
+    siteName?: string;
+    siteId?: string;
+    forceLogout= true
 
     constructor(
         protected content: IonContent,
         protected elementRef: ElementRef,
         protected changeDetectorRef: ChangeDetectorRef,
+        private sitesProvider: CoreSitesProvider,
+        private device: Device,
+        private nav:NavController,
+        public alertCtrl: AlertController
     ) {
         // Pass this instance to all components so they can use its methods and properties.
         this.data.coreCourseFormatComponent = this;
+        const currentSite = CoreSites.getRequiredCurrentSite();
+        this.removeAccountOnLogout = !!CoreConstants.CONFIG.removeaccountonlogout;
+        currentSite.getSiteName().then(res => this.siteName = res);
+        this.siteId = currentSite.getId();
+
     }
 
     /**
@@ -183,8 +204,83 @@ export class CoreCourseFormatComponent implements OnInit, OnChanges, OnDestroy {
                 }
             }
             this.changeDetectorRef.markForCheck();
+
+        });
+        // TH_edit
+
+        this.checkisloginvalidandlogout();
+    }
+
+    async checkisloginvalidandlogout(): Promise<void> {
+        const site = await CoreSites.getSite();
+
+        var uuid = '';
+            if (this.device.uuid) {
+                uuid = this.device.uuid;
+        }
+
+        const userId = site.getUserId()
+
+        var data: any = {
+            userid: userId,
+            uuid: uuid,
+            loginstatus: 1,
+        };
+
+        const preSets = {
+            getFromCache: false,
+        };
+
+        site.write('local_th_managelogin_checklogin_valid', data, preSets).then(async (courses) => {
+            const jsonValue = JSON.stringify(courses);
+            let temp = JSON.parse(jsonValue)
+
+            if (temp.isloggedin_valid == 0) {
+                    const alert = await this.alertCtrl.create({
+                    header: 'Thông báo',
+                    message: 'Tài khoản của bạn bị đăng xuất do được đăng nhập trên thiết bị mới!',
+                    buttons: [{
+                        text: 'Đồng ý',
+                        role: 'destructive',
+                        handler: () => this.logout()
+                    }]
+                });
+
+
+                await alert.present();
+            }
+        }).catch((error) => {
+            console.error("Error in checking login valid: ", error);
         });
     }
+
+    async logout () {
+
+        if (CoreNavigator.currentRouteCanBlockLeave()) {
+            await CoreDomUtils.showAlert(undefined, Translate.instant('core.cannotlogoutpageblocks'));
+            return;
+        }
+
+        if (this.removeAccountOnLogout) {
+            // Ask confirm.
+            const siteName = this.siteName ?
+                await CoreFilter.formatText(this.siteName, { clean: true, singleLine: true, filter: false }, [], this.siteId) :
+                '';
+
+            try {
+                await CoreDomUtils.showDeleteConfirm('core.login.confirmdeletesite', { sitename: siteName });
+            } catch (error) {
+                // User cancelled, stop.
+                return;
+            }
+        }
+
+        await CoreSites.logout_isloggedin_valid({
+            forceLogout: true,
+            removeAccount: this.removeAccountOnLogout,
+        });
+    }
+
 
     /**
      * Detect changes on input properties.

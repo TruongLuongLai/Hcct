@@ -55,7 +55,7 @@ export class AddonModResourceHelperProvider {
             contents,
         );
 
-        return CoreMimetypeUtils.getEmbeddedHtml(contents[0], result.path);
+        return CoreMimetypeUtils.getEmbeddedHtml(contents[0], result.path, contents);
     }
 
     /**

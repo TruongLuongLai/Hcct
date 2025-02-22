@@ -2,18 +2,22 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>CLIENT_ID</key>
+	<string>53838765805-60k3cq7db8j8p86nqm8aj3i7gag0h2aa.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.53838765805-60k3cq7db8j8p86nqm8aj3i7gag0h2aa</string>
 	<key>API_KEY</key>
-	<string>AIzaSyAXVZDL6ecdarBFwxpIfUda1aIx97FWluM</string>
+	<string>AIzaSyABc2th7kwEWd8LVslgN6RAxlfWWAWupxk</string>
 	<key>GCM_SENDER_ID</key>
-	<string>852648239490</string>
+	<string>53838765805</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>vn.edu.aum.ulsa</string>
+	<string>vn.edu.aum.hcct</string>
 	<key>PROJECT_ID</key>
-	<string>thulsaapp</string>
+	<string>thhcctapp-10891</string>
 	<key>STORAGE_BUCKET</key>
-	<string>thulsaapp.appspot.com</string>
+	<string>thhcctapp-10891.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -25,6 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:852648239490:ios:792dc1710a610ae0b12f9b</string>
+	<string>1:53838765805:ios:4aa24dd800f252e5d3f6e4</string>
 </dict>
 </plist>

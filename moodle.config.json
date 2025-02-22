@@ -1,6 +1,6 @@
 {
-    "app_id": "vn.edu.aum.ulsa",
-    "appname": "Ulsa",
+    "app_id": "vn.edu.aum.hcct",
+    "appname": "HCCT",
     "versioncode": 44004,
     "versionname": "4.4.0",
     "cache_update_frequency_usually": 420000,
@@ -36,7 +36,7 @@
     "customurlscheme": "moodlemobile",
     "sites": [
         {
-                "url": "https://mdl.eln.vn/moodle-4.1.10/"
+                "url": "https://hcct.aum.edu.vn/"
         }
     ],
     "multisitesdisplay": "",
